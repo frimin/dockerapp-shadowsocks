@@ -21,5 +21,5 @@ services:
     entrypoint: ""
     command: sh -c "exec udp2raw -s -l 0.0.0.0:4000 -r $$(getent hosts kcptun | awk '{ print $$1 }'):6500 -k ${SSSERVER_UDP2RAW_KEY:-?} --raw-mode faketcp"
     ports:
-      - "${SSSERVER_PORT:-?}:4000"
+      - "${SSSERVER_LISTEN:-?}:4000"
 

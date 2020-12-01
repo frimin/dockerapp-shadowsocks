@@ -6,7 +6,7 @@ services:
     restart: always
     command: client -r udp2raw:4000 -l "0.0.0.0:8000" --mode fast3 --key ${SSPROXY_KCP_KEY:-?} --autoexpire 900 --sockbuf 16777217 --dscp 46 --crypt aes-128
     ports:
-      - "${SSPROXY_PORT:-?}:8000"
+      - "${SSPROXY_LISTEN:-?}:8000"
 
   udp2raw:
     image: xyzrlee/udp2raw

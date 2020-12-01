@@ -9,7 +9,7 @@ services:
       - PASSWORD=${SSLOCAL_PASSWORD:-?}
       - METHOD=aes-256-cfb
     ports:
-      - ${SSLOCAL_PORT:-?}:8118
+      - ${SSLOCAL_BIND:-?}:8118
     restart: always
     logging:
       driver: "json-file"
