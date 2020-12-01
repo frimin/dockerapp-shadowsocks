@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  kcpclient:
+    image: xtaci/kcptun:v20190611
+    restart: always
+    command: client -r udp2raw:4000 -l "0.0.0.0:8000" --mode fast3 --key ${SSPROXY_KCP_KEY:-?} --autoexpire 900 --sockbuf 16777217 --dscp 46 --crypt aes-128
+    ports:
+      - "${SSPROXY_PORT:-?}:8000"
+
+  udp2raw:
+    image: xyzrlee/udp2raw
+    restart: always
+    command: ./udp2raw_amd64 -c -l 0.0.0.0:4000 -r ${SSPROXY_SSSERVER_ADDR:-?} -k ${SSRPOXY_UDP2RAW_KEY:-?} --raw-mode faketcp
+

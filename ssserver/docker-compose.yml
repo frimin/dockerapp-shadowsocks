@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ssserver:
+    image: shadowsocks/shadowsocks-libev:v3.3.1
+    restart: always
+    environment:
+      SERVER_ADDR: "0.0.0.0"
+      SERVER_PORT: "4000"
+      PASSWORD: "${SSSERVER_PASSWORD:-?}"
+      METHOD: "aes-256-cfb"
+
+  kcptun:
+    image: xtaci/kcptun:v20190611
+    restart: always
+    command: server -t ssserver:4000 -l 0.0.0.0:6500 --mode fast3 --key ${SSSERVER_KCP_KEY:-?} --sockbuf 16777217 --dscp 46 --crypt aes-128
+
+  udp2raw:
+    image: xyzrlee/udp2raw
+    restart: always
+    entrypoint: ""
+    command: sh -c "exec udp2raw -s -l 0.0.0.0:4000 -r $$(getent hosts kcptun | awk '{ print $$1 }'):6500 -k ${SSSERVER_UDP2RAW_KEY:-?} --raw-mode faketcp"
+    ports:
+      - "${SSSERVER_PORT:-?}:4000"
+

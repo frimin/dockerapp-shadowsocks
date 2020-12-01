@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  sslocal:
+    image: teachmyself/sslocal
+    environment:
+      - SERVER_HOST=${SSLOCAL_SSPROXY_HOST:-?}
+      - SERVER_PORT=${SSLOCAL_SSPROXY_PORT:-?}
+      - PASSWORD=${SSLOCAL_PASSWORD:-?}
+      - METHOD=aes-256-cfb
+    ports:
+      - ${SSLOCAL_PORT:-?}:8118
+    restart: always
+    logging:
+      driver: "json-file"
